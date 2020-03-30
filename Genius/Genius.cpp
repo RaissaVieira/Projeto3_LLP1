@@ -26,7 +26,7 @@ void novaOperacao()
     cout << "\t2-NAO\n";
     cout<<"\tDigite a operação que deseja ser realizada: ";
     cin>>opcao;
-    cin.ignore();
+    cin.ignore(); 
 
     stringstream op (opcao);
     int escolha = 0;
@@ -95,8 +95,8 @@ void Opcoes ()
 
 
 int main( int argc, const char** argv )
-{
-    Opcoes();
+{ 
+    Opcoes();             
     return 0;
 }
 

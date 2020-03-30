@@ -82,7 +82,6 @@ public:
                 //Colocar o codigo de leitura da posicao do jogador
 
                 std::cout<< "ler" << "\n"; //testando (apagar depois)
-                usleep(5000);
                 opcao = faceDetect._faceCapture(pontuacao);
 
                 if(*it != opcao /*area que a pessoa vai com a cabeca*/){

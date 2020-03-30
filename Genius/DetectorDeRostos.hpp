@@ -6,6 +6,7 @@
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"
+#include <ctime>
 
 using namespace std;
 using namespace cv;
@@ -22,7 +23,7 @@ class DetectorDeRostos
     public:
     void detectAndDraw( Mat& img, CascadeClassifier& cascade,
                     CascadeClassifier& nestedCascade,
-                    double scale)
+                    double scale, time_t tempo_anterior)
         {
             static int frames = 0;
             double t = 0;
@@ -60,96 +61,105 @@ class DetectorDeRostos
 
             t = (double)getTickCount() - t;
         //    printf( "detection time = %g ms\n", t*1000/getTickFrequency());
+            //std::cout << "Restam " << 5 - (time(NULL) - tempo_anterior) << "segundos" <<  std::endl;
+                
             
-            for ( size_t i = 0; i < faces.size(); i++ )
+            if(time(NULL) - tempo_anterior > 5)
             {
-                Rect r = faces[i];
-                //OBTENDO AS COORDENADAS DO CENTRO DO RETÂNGULO
-                double centerX = r.x + 0.5 * r.width;
-                double centerY = r.y + 0.5 * r.height;
-
-                //---------------------------------------------
-                //printf( "[%3f, %3f]\n", centerX, centerY);//Exibindo as coordenadas do centro do retângulo
-                if(centerX < 330)
+                for ( size_t i = 0; i < faces.size(); i++ )
                 {
-                    if(centerY < 270)
-                    {
-                        printf("Vermelho\n");
-                        cor_detectada = 1;
-                    }else//Senão for menor, então é maior ou igual a 270
-                    {
-                        printf("Azul\n"); 
-                        cor_detectada = 3;
-                    }
+                    Rect r = faces[i];
+                    //OBTENDO AS COORDENADAS DO CENTRO DO RETÂNGULO
+                    double centerX = r.x + 0.5 * r.width;
+                    double centerY = r.y + 0.5 * r.height;
+
+                    //---------------------------------------------
+                    //printf( "[%3f, %3f]\n", centerX, centerY);//Exibindo as coordenadas do centro do retângulo
                     
-                }else//Se não for menor, então é maior ou igual a 330
-                {
-                    if(centerY < 270)
+                    
+                    if(centerX < 330)
                     {
-                        printf("Verde\n");
-                        cor_detectada = 2;
-                    }else//Senão for menor, então é maior ou igual a 270
+                        if(centerY < 270)
+                        {
+                            printf("Vermelho\n");
+                            cor_detectada = 1;
+                        }else//Senão for menor, então é maior ou igual a 270
+                        {
+                            printf("Azul\n"); 
+                            cor_detectada = 3;
+                        }
+                        
+                    }else//Se não for menor, então é maior ou igual a 330
                     {
-                        printf("Amarelo\n"); 
-                        cor_detectada = 4;
+                        if(centerY < 270)
+                        {
+                            printf("Verde\n");
+                            cor_detectada = 2;
+                        }else//Senão for menor, então é maior ou igual a 270
+                        {
+                            printf("Amarelo\n"); 
+                            cor_detectada = 4;
+                        }
                     }
-                }
+                
+            
 
-                /*
-                    Anotações:
-                    Façamos o centro, no eixo y, como sendo 270.
-                    Façamos o centro, no eixo x, como sendo 330.
+                    /*
+                        Anotações:
+                        Façamos o centro, no eixo y, como sendo 270.
+                        Façamos o centro, no eixo x, como sendo 330.
 
-                    A tela será dividida da seguinte forma:
+                        A tela será dividida da seguinte forma:
 
-                    ___________________________             
-                    |             |             |
-                    |             |             |
-                    |   Vermelho  |   Verde     |
-                    |             |             |
-                    |_____________|_____________|270y
-                    |             |             |
-                    |             |             |
-                    |   Azul      |   Amarelo   |
-                    |             |             |
-                    |_____________|_____________|
-                                330x
+                        ___________________________             
+                        |             |             |
+                        |             |             |
+                        |   Vermelho  |   Verde     |
+                        |             |             |
+                        |_____________|_____________|270y
+                        |             |             |
+                        |             |             |
+                        |   Azul      |   Amarelo   |
+                        |             |             |
+                        |_____________|_____________|
+                                    330x
 
-                    Então:
-                        Se x < 330 e y < 270 , então está no Vermelho
-                        Se x < 330 e y > 270 , então está no Azul
-                        Se x > 330 e y < 270 , então está no Verde
-                        Se x > 330 e y > 270 , então está no Amarelo
+                        Então:
+                            Se x < 330 e y < 270 , então está no Vermelho
+                            Se x < 330 e y > 270 , então está no Azul
+                            Se x > 330 e y < 270 , então está no Verde
+                            Se x > 330 e y > 270 , então está no Amarelo
 
 
 
-                */
-                Mat smallImgROI;
-                vector<Rect> nestedObjects;
-                Point center;
-                Scalar color = colors[i%8];
-                int radius;
+                    */
+                    Mat smallImgROI;
+                    vector<Rect> nestedObjects;
+                    Point center;
+                    Scalar color = colors[i%8];
+                    int radius;
 
-                rectangle( img, Point(cvRound(r.x*scale), cvRound(r.y*scale)),
-                        Point(cvRound((r.x + r.width-1)*scale), cvRound((r.y + r.height-1)*scale)),
-                        color, 3, 8, 0);
-                if( nestedCascade.empty() )
-                    continue;
-                smallImgROI = smallImg( r );
-                nestedCascade.detectMultiScale( smallImgROI, nestedObjects,
-                    1.1, 2, 0
-                    //|CASCADE_FIND_BIGGEST_OBJECT
-                    //|CASCADE_DO_ROUGH_SEARCH
-                    //|CASCADE_DO_CANNY_PRUNING
-                    |CASCADE_SCALE_IMAGE,
-                    Size(30, 30) );
-                for ( size_t j = 0; j < nestedObjects.size(); j++ )
-                {
-                    Rect nr = nestedObjects[j];
-                    center.x = cvRound((r.x + nr.x + nr.width*0.5)*scale);
-                    center.y = cvRound((r.y + nr.y + nr.height*0.5)*scale);
-                    radius = cvRound((nr.width + nr.height)*0.25*scale);
-                    circle( img, center, radius, color, 3, 8, 0 );
+                    rectangle( img, Point(cvRound(r.x*scale), cvRound(r.y*scale)),
+                            Point(cvRound((r.x + r.width-1)*scale), cvRound((r.y + r.height-1)*scale)),
+                            color, 3, 8, 0);
+                    if( nestedCascade.empty() )
+                        continue;
+                    smallImgROI = smallImg( r );
+                    nestedCascade.detectMultiScale( smallImgROI, nestedObjects,
+                        1.1, 2, 0
+                        //|CASCADE_FIND_BIGGEST_OBJECT
+                        //|CASCADE_DO_ROUGH_SEARCH
+                        //|CASCADE_DO_CANNY_PRUNING
+                        |CASCADE_SCALE_IMAGE,
+                        Size(30, 30) );
+                    for ( size_t j = 0; j < nestedObjects.size(); j++ )
+                    {
+                        Rect nr = nestedObjects[j];
+                        center.x = cvRound((r.x + nr.x + nr.width*0.5)*scale);
+                        center.y = cvRound((r.y + nr.y + nr.height*0.5)*scale);
+                        radius = cvRound((nr.width + nr.height)*0.25*scale);
+                        circle( img, center, radius, color, 3, 8, 0 );
+                    }
                 }
             }
 
@@ -159,6 +169,21 @@ class DetectorDeRostos
             cv::putText(img, //target image
                 to_string(pontuacao_atual)+" PONTOS", //text
                 cv::Point(465, 465), //top-left position
+                cv::FONT_HERSHEY_DUPLEX,
+                1.0,
+                CV_RGB(255, 255, 255), //font color
+                2);
+        
+            time_t tempo_restante = 5 - (time(NULL) - tempo_anterior);
+            string tempo_para_exibir = "0";
+            if(tempo_restante > 0)
+            {
+                tempo_para_exibir = to_string(tempo_restante);
+            }
+            
+            cv::putText(img, //target image
+                "Restam " + tempo_para_exibir+" Segundos", //text
+                cv::Point(0, 465), //top-left position
                 cv::FONT_HERSHEY_DUPLEX,
                 1.0,
                 CV_RGB(255, 255, 255), //font color
@@ -205,18 +230,18 @@ class DetectorDeRostos
         int _faceCapture(int pontuacao)
         {
             VideoCapture capture;
-            int result;
             Mat frame, image;
+            time_t tempo_anterior;
             pontuacao_atual = pontuacao;
             string inputName;
             CascadeClassifier cascade, nestedCascade;
             double scale = 1;
             cor_detectada = 0;
-            fruta = cv::imread("Genius_.png", IMREAD_UNCHANGED);
+            fruta = cv::imread("Genius_t.png", IMREAD_UNCHANGED);
             if (fruta.empty())
                 printf("Error opening file Genius.png\n");
 
-            string folder = "/home/raissa/Downloads/opencv-4.1.2/data/haarcascades/";
+            string folder = "/home/lucas/Downloads/opencv-4.1.2/data/haarcascades/";
             cascadeName = folder + "haarcascade_frontalface_alt.xml";
             nestedCascadeName = folder + "haarcascade_eye_tree_eyeglasses.xml";
             inputName = "/dev/video0";
@@ -239,15 +264,16 @@ class DetectorDeRostos
             if( capture.isOpened() )
             {
                 cout << "Video capturing has been started ..." << endl;
-                
+                tempo_anterior = time(NULL);
                 for(;;)
                 {
                     capture >> frame;
                     if( frame.empty() )
                         break;
-
                     //Mat frame1 = frame.clone();
-                    detectAndDraw( frame, cascade, nestedCascade, scale);
+
+                    detectAndDraw( frame, cascade, nestedCascade, scale, tempo_anterior);
+                    
 
                     if(cor_detectada != 0)
                     {
