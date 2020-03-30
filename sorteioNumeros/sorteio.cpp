@@ -34,25 +34,25 @@ void Sorteio::Sequencia(){
                 {
                 case 1:
                     /* codigo da musica (vermelho) */
-                    system("mpg123 vermelho.mp3 &");
+                    system("mpg123 vermelho.mp3");
                     std::cout << 1 << " ";
                     break;
 
                 case 2:
                     /* codigo da musica (verde) */
-                    system("mpg123 verde.mp3 &");
+                    system("mpg123 verde.mp3");
                     std::cout << 2 << " ";
                     break;
 
                 case 3:
                     /* codigo da musica (azul) */
-                    system("mpg123 azul.mp3 &");
+                    system("mpg123 azul.mp3");
                     std::cout << 3 << " ";
                     break;
 
                 case 4:
                     /* codigo da musica (amarelo) */
-                    system("mpg123 amarelo.mp3 &");
+                    system("mpg123 amarelo.mp3");
                     std::cout << 4 << " ";
                     break;
                 }
