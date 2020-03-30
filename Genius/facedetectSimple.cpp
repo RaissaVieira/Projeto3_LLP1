@@ -154,16 +154,56 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
 
         //---------------------------------------------
         printf( "[%3f, %3f]\n", centerX, centerY);//Exibindo as coordenadas do centro do retângulo
-        if(centerX > 330)
+        if(centerX < 330)
         {
-            printf("Direita\n");
-        }else if(centerX < 320)
+            if(centerY < 270)
+            {
+                printf("Vermelho\n");
+            }else//Senão for menor, então é maior ou igual a 270
+            {
+                printf("Azul"); 
+            }
+            
+        }else//Se não for menor, então é maior ou igual a 330
         {
-            printf("Esquerda\n");
-        }else
-        {
-            printf("Centro\n");
+            if(centerY < 270)
+            {
+                printf("Verde\n");
+            }else//Senão for menor, então é maior ou igual a 270
+            {
+                printf("Amarelo\n"); 
+            }
         }
+
+        /*
+            Anotações:
+            Façamos o centro, no eixo y, como sendo 270.
+            Façamos o centro, no eixo x, como sendo 330.
+
+            A tela será dividida da seguinte forma:
+
+             ___________________________             
+            |             |             |
+            |             |             |
+            |   Vermelho  |   Verde     |
+            |             |             |
+            |_____________|_____________|270y
+            |             |             |
+            |             |             |
+            |   Azul      |   Amarelo   |
+            |             |             |
+            |_____________|_____________|
+                         330x
+
+            Então:
+                Se x < 330 e y < 270 , então está no Vermelho
+                Se x < 330 e y > 270 , então está no Azul
+                Se x > 330 e y < 270 , então está no Verde
+                Se x > 330 e y > 270 , então está no Amarelo
+
+
+
+        */
         
         
         Mat smallImgROI;
