@@ -7,6 +7,7 @@
 using namespace std;
 using namespace cv;
 
+
 void detectAndDraw( Mat& img, CascadeClassifier& cascade,
                     CascadeClassifier& nestedCascade,
                     double scale);
@@ -62,7 +63,7 @@ int _faceCapture()
     if (fruta.empty())
         printf("Error opening file laranja.pn\n");
 
-    string folder = "/home/lucas/Downloads/opencv-4.1.2/data/haarcascades/";
+    string folder = "/home/raissa/Documents/Projeto3-LLP1/opencv-4.1.2/data/haarcascades/";
     cascadeName = folder + "haarcascade_frontalface_alt.xml";
     nestedCascadeName = folder + "haarcascade_eye_tree_eyeglasses.xml";
     inputName = "/dev/video0";
