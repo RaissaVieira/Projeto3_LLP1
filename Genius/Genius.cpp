@@ -2,8 +2,6 @@
 #include <sstream>
 #include "sorteio.hpp"
 
-
-
 using namespace std;
 
 Sorteio jogo;

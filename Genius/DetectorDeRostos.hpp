@@ -216,7 +216,7 @@ class DetectorDeRostos
             if (fruta.empty())
                 printf("Error opening file Genius.png\n");
 
-            string folder = "/home/lucas/Downloads/opencv-4.1.2/data/haarcascades/";
+            string folder = "/home/raissa/Downloads/opencv-4.1.2/data/haarcascades/";
             cascadeName = folder + "haarcascade_frontalface_alt.xml";
             nestedCascadeName = folder + "haarcascade_eye_tree_eyeglasses.xml";
             inputName = "/dev/video0";
