@@ -50,15 +50,15 @@ void drawTransparency2(Mat frame, Mat transp, int xPos, int yPos) {
     addWeighted(roi2, alpha, roi1, 1.0 - alpha, 0.0, roi1);
 }
 
-int _faceCapture()
+int main( int argc, const char** argv )
 {
-	VideoCapture capture;
+    VideoCapture capture;
     Mat frame, image;
     string inputName;
     CascadeClassifier cascade, nestedCascade;
     double scale = 1;
 
-    //fruta = cv::imread("laranja.png", IMREAD_UNCHANGED);
+    fruta = cv::imread("laranja.png", IMREAD_UNCHANGED);
     if (fruta.empty())
         printf("Error opening file laranja.pn\n");
 
@@ -100,14 +100,7 @@ int _faceCapture()
                 break;
         }
     }
-    return 0;
 
-}
-
-int main( int argc, const char** argv )
-{
-	_faceCapture();
-	
     return 0;
 }
 
@@ -188,7 +181,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
         drawTransparency2(img, fruta, 100, 100);
 
     cv::putText(img, //target image
-        "I can see you", //text
+        "Meu texto de teste", //text
         cv::Point(50, 50), //top-left position
         cv::FONT_HERSHEY_DUPLEX,
         1.0,
