@@ -46,14 +46,14 @@ void drawTransparency2(Mat frame, Mat transp, int xPos, int yPos) {
     Mat roi1 = frame(Rect(xPos, yPos, transp.cols, transp.rows));
     Mat roi2 = roi1.clone();
     transp.copyTo(roi2.rowRange(0, transp.rows).colRange(0, transp.cols), mask);
-    printf("%p, %p\n", roi1.data, roi2.data);
+    //printf("%p, %p\n", roi1.data, roi2.data);
     double alpha = 0.9;
     addWeighted(roi2, alpha, roi1, 1.0 - alpha, 0.0, roi1);
 }
 
-int _faceCapture()
+int main( int argc, const char** argv )
 {
-	VideoCapture capture;
+    VideoCapture capture;
     Mat frame, image;
     string inputName;
     CascadeClassifier cascade, nestedCascade;
@@ -101,14 +101,7 @@ int _faceCapture()
                 break;
         }
     }
-    return 0;
 
-}
-
-int main( int argc, const char** argv )
-{
-	_faceCapture();
-	
     return 0;
 }
 
@@ -155,7 +148,65 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Rect r = faces[i];
-        printf( "[%3d, %3d]\n", r.x, r.y);
+
+        //OBTENDO AS COORDENADAS DO CENTRO DO RETÂNGULO
+        double centerX = r.x + 0.5 * r.width;
+        double centerY = r.y + 0.5 * r.height;
+
+        //---------------------------------------------
+        printf( "[%3f, %3f]\n", centerX, centerY);//Exibindo as coordenadas do centro do retângulo
+        if(centerX < 330)
+        {
+            if(centerY < 270)
+            {
+                printf("Vermelho\n");
+            }else//Senão for menor, então é maior ou igual a 270
+            {
+                printf("Azul"); 
+            }
+            
+        }else//Se não for menor, então é maior ou igual a 330
+        {
+            if(centerY < 270)
+            {
+                printf("Verde\n");
+            }else//Senão for menor, então é maior ou igual a 270
+            {
+                printf("Amarelo\n"); 
+            }
+        }
+
+        /*
+            Anotações:
+            Façamos o centro, no eixo y, como sendo 270.
+            Façamos o centro, no eixo x, como sendo 330.
+
+            A tela será dividida da seguinte forma:
+
+             ___________________________             
+            |             |             |
+            |             |             |
+            |   Vermelho  |   Verde     |
+            |             |             |
+            |_____________|_____________|270y
+            |             |             |
+            |             |             |
+            |   Azul      |   Amarelo   |
+            |             |             |
+            |_____________|_____________|
+                         330x
+
+            Então:
+                Se x < 330 e y < 270 , então está no Vermelho
+                Se x < 330 e y > 270 , então está no Azul
+                Se x > 330 e y < 270 , então está no Verde
+                Se x > 330 e y > 270 , então está no Amarelo
+
+
+
+        */
+        
+        
         Mat smallImgROI;
         vector<Rect> nestedObjects;
         Point center;
@@ -189,7 +240,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
         drawTransparency2(img, fruta, 100, 100);
 
     cv::putText(img, //target image
-        "I can see you", //text
+        "Meu texto de teste", //text
         cv::Point(50, 50), //top-left position
         cv::FONT_HERSHEY_DUPLEX,
         1.0,
