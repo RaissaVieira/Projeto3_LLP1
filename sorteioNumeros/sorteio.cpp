@@ -5,6 +5,9 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <unistd.h>
+
+unsigned int microseconds;
 
 #define vermelho 1
 #define verde 2
@@ -19,7 +22,9 @@ int Sorteio::sortear(){
 
 void Sorteio::Sequencia(){
     int num,i,pontuacao, opcao, x;
-    std::stringstream pontuacao1;
+    std::string pontuacao1;
+
+    numeros.clear();
 
     srand(time(NULL));
     i = pontuacao = 0;
@@ -34,24 +39,28 @@ void Sorteio::Sequencia(){
                 {
                 case 1:
                     /* codigo da musica (vermelho) */
+                    usleep(3000);
                     system("mpg123 vermelho.mp3");
                     std::cout << 1 << " ";
                     break;
 
                 case 2:
                     /* codigo da musica (verde) */
+                    usleep(3000);
                     system("mpg123 verde.mp3");
                     std::cout << 2 << " ";
                     break;
 
                 case 3:
                     /* codigo da musica (azul) */
+                    usleep(3000);
                     system("mpg123 azul.mp3");
                     std::cout << 3 << " ";
                     break;
 
                 case 4:
                     /* codigo da musica (amarelo) */
+                    usleep(3000);
                     system("mpg123 amarelo.mp3");
                     std::cout << 4 << " ";
                     break;
@@ -69,24 +78,28 @@ void Sorteio::Sequencia(){
                     i = 1;
                     break;
                 }
-
-                pontuacao1 << pontuacao++;
-                std::cout << "PONTUACAO: " << pontuacao1.str() << std::endl;
+                
+                pontuacao1 = std::to_string(++pontuacao);
+                std::cout << "PONTUACAO: " << pontuacao1 << std::endl;
 
             }
             if(i == 1){ //Perdeu
-                std::cout << "PONTUACAO FINAL: " << pontuacao1.str() << std::endl;
+                std::cout << "PONTUACAO FINAL: " << pontuacao1 << std::endl;
+                system("mpg123 Perdeu.mp3");
                 salvarArquivo(pontuacao);
                 break;
             }
+
+            system("mpg123 respostacerta.mp3");
+
         }
 }
 
 void Sorteio::salvarArquivo(int pontuacao){
-    std::ofstream saida("Ranking.txt", std::ios::out);
+    std::ofstream saida("Ranking.txt", std::ios::app);
 
     if(!saida.is_open()){
-        std::cout<<"Nao foi possivel abrir saida"<<std::endl;
+        std::cout<<"Nao foi possivel abrir o arquivo de saida"<<std::endl;
     }
 
     saida<<pontuacao<< std::endl;

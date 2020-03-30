@@ -6,6 +6,8 @@ using namespace std;
 
 Sorteio jogo;
 
+extern void Opcoes();
+
 void limpa_tela()
 {
     #ifdef __unix__
@@ -13,6 +15,42 @@ void limpa_tela()
     #elif WIN32
         system("cls");
     #endif
+}
+
+void novaOperacao()
+{
+    cout << "\n __________________________________________\n";
+    string opcao;
+
+    cout << "Deseja realizar uma nova operacao?\n";
+    cout << "\t1-SIM\n";
+    cout << "\t2-NAO\n";
+    cout<<"\tDigite a operação que deseja ser realizada: ";
+    cin>>opcao;
+    cin.ignore();
+
+    stringstream op (opcao);
+    int escolha = 0;
+    op>>escolha;
+
+    switch (escolha)
+    {
+    case 0:
+        limpa_tela();
+        novaOperacao();
+        break;
+    case 1:
+        limpa_tela();
+        Opcoes();
+        break;
+    case 2:
+        limpa_tela();
+        exit(0);
+        break;
+    default:
+        limpa_tela();
+        novaOperacao();
+    }
 }
 
 void Opcoes ()
@@ -52,6 +90,8 @@ void Opcoes ()
     default:
         Opcoes();
     }
+
+    novaOperacao();
 }
 
 int main(){
