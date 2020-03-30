@@ -26,7 +26,7 @@ void novaOperacao()
     cout << "\t2-NAO\n";
     cout<<"\tDigite a operação que deseja ser realizada: ";
     cin>>opcao;
-    cin.ignore(); 
+    cin.ignore();    
 
     stringstream op (opcao);
     int escolha = 0;
@@ -60,8 +60,8 @@ void Opcoes ()
     cout<<"\t1-Iniciar jogo"<<endl;
     cout<<"\t2-Placar"<<endl;
     cout<<"\t3-Sair"<<endl;
-
-
+ 
+ 
     cout<<"\tDigite a operação que deseja ser realizada: ";
     cin>>opcao;
     cin.ignore();
@@ -89,10 +89,10 @@ void Opcoes ()
     default:
         Opcoes();
     }
-
+  
     novaOperacao();
 }
-
+  
 
 int main( int argc, const char** argv )
 { 

@@ -23,7 +23,7 @@ class DetectorDeRostos
     public:
     void detectAndDraw( Mat& img, CascadeClassifier& cascade,
                     CascadeClassifier& nestedCascade,
-                    double scale, time_t tempo_anterior)
+                    double scale, time_t tempo_anterior, const int cor_atual)
         {
             static int frames = 0;
             double t = 0;
@@ -101,6 +101,7 @@ class DetectorDeRostos
                             cor_detectada = 4;
                         }
                     }
+
                 
             
 
@@ -227,7 +228,7 @@ class DetectorDeRostos
             addWeighted(roi2, alpha, roi1, 1.0 - alpha, 0.0, roi1);
         }
 
-        int _faceCapture(int pontuacao)
+        int _faceCapture(int pontuacao, const int cor_atual)
         {
             VideoCapture capture;
             Mat frame, image;
@@ -260,7 +261,6 @@ class DetectorDeRostos
                 cout << "Capture from camera #" <<  inputName << " didn't work" << endl;
                 return 1;
             }
-
             if( capture.isOpened() )
             {
                 cout << "Video capturing has been started ..." << endl;
@@ -268,15 +268,16 @@ class DetectorDeRostos
                 for(;;)
                 {
                     capture >> frame;
-                    if( frame.empty() )
+                    if(frame.empty() )
                         break;
                     //Mat frame1 = frame.clone();
 
-                    detectAndDraw( frame, cascade, nestedCascade, scale, tempo_anterior);
+                    detectAndDraw( frame, cascade, nestedCascade, scale, tempo_anterior, cor_atual);
                     
 
                     if(cor_detectada != 0)
                     {
+
                         break;
                     }
                 
@@ -287,6 +288,7 @@ class DetectorDeRostos
                         break;
                 }
             }
+            
             return cor_detectada;
 
         }

@@ -82,7 +82,7 @@ public:
                 //Colocar o codigo de leitura da posicao do jogador
 
                 std::cout<< "ler" << "\n"; //testando (apagar depois)
-                opcao = faceDetect._faceCapture(pontuacao);
+                opcao = faceDetect._faceCapture(pontuacao, *it);
 
                 if(*it != opcao /*area que a pessoa vai com a cabeca*/){
                     i = 1;
@@ -95,6 +95,7 @@ public:
 
             }
             if(i == 1){ //Perdeu
+                destroyAllWindows();
                 std::cout << "PONTUACAO FINAL: " << pontuacao1 << std::endl;
                 system("mpg123 Perdeu.mp3");
                 salvarArquivo(pontuacao);
