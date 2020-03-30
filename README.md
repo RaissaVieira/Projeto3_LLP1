@@ -6,7 +6,7 @@ Grupo:
 [Raissa Vieira](https://github.com/RaissaVieira);  
 [Yasmin Medeiros](https://github.com/yasminmedeiros).  
   
-Prof. [Derzu Omaia] e [Tiago Maritan].  
+Prof. Derzu Omaia e Tiago Maritan.  
   
 **Descrição:** Projeto que consiste num jogo (Genius), com a leitura das repostas do jogador feitas com OpenCV.  
 **Linguagem:** C++.
