@@ -45,7 +45,7 @@ void drawTransparency2(Mat frame, Mat transp, int xPos, int yPos) {
     Mat roi1 = frame(Rect(xPos, yPos, transp.cols, transp.rows));
     Mat roi2 = roi1.clone();
     transp.copyTo(roi2.rowRange(0, transp.rows).colRange(0, transp.cols), mask);
-    printf("%p, %p\n", roi1.data, roi2.data);
+    //printf("%p, %p\n", roi1.data, roi2.data);
     double alpha = 0.9;
     addWeighted(roi2, alpha, roi1, 1.0 - alpha, 0.0, roi1);
 }
@@ -58,7 +58,7 @@ int main( int argc, const char** argv )
     CascadeClassifier cascade, nestedCascade;
     double scale = 1;
 
-    fruta = cv::imread("laranja.png", IMREAD_UNCHANGED);
+    //fruta = cv::imread("laranja.png", IMREAD_UNCHANGED);
     if (fruta.empty())
         printf("Error opening file laranja.pn\n");
 
@@ -147,7 +147,25 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Rect r = faces[i];
-        printf( "[%3d, %3d]\n", r.x, r.y);
+
+        //OBTENDO AS COORDENADAS DO CENTRO DO RETÂNGULO
+        double centerX = r.x + 0.5 * r.width;
+        double centerY = r.y + 0.5 * r.height;
+
+        //---------------------------------------------
+        printf( "[%3f, %3f]\n", centerX, centerY);//Exibindo as coordenadas do centro do retângulo
+        if(centerX > 330)
+        {
+            printf("Direita\n");
+        }else if(centerX < 320)
+        {
+            printf("Esquerda\n");
+        }else
+        {
+            printf("Centro\n");
+        }
+        
+        
         Mat smallImgROI;
         vector<Rect> nestedObjects;
         Point center;
