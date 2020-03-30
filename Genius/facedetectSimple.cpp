@@ -51,19 +51,19 @@ void drawTransparency2(Mat frame, Mat transp, int xPos, int yPos) {
     addWeighted(roi2, alpha, roi1, 1.0 - alpha, 0.0, roi1);
 }
 
-int main( int argc, const char** argv )
+int _faceCapture()
 {
-    VideoCapture capture;
+	VideoCapture capture;
     Mat frame, image;
     string inputName;
     CascadeClassifier cascade, nestedCascade;
     double scale = 1;
 
-    //fruta = cv::imread("laranja.png", IMREAD_UNCHANGED);
+    fruta = cv::imread("Genius_.png", IMREAD_UNCHANGED);
     if (fruta.empty())
-        printf("Error opening file laranja.pn\n");
+        printf("Error opening file Genius.png\n");
 
-    string folder = "/home/raissa/Documents/Projeto3-LLP1/opencv-4.1.2/data/haarcascades/";
+    string folder = "/home/lucas/Downloads/opencv-4.1.2/data/haarcascades/";
     cascadeName = folder + "haarcascade_frontalface_alt.xml";
     nestedCascadeName = folder + "haarcascade_eye_tree_eyeglasses.xml";
     inputName = "/dev/video0";
@@ -101,7 +101,14 @@ int main( int argc, const char** argv )
                 break;
         }
     }
+    return 0;
 
+}
+
+int main( int argc, const char** argv )
+{
+	_faceCapture();
+	
     return 0;
 }
 
@@ -148,7 +155,6 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Rect r = faces[i];
-
         //OBTENDO AS COORDENADAS DO CENTRO DO RETÂNGULO
         double centerX = r.x + 0.5 * r.width;
         double centerY = r.y + 0.5 * r.height;
@@ -162,7 +168,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
                 printf("Vermelho\n");
             }else//Senão for menor, então é maior ou igual a 270
             {
-                printf("Azul"); 
+                printf("Azul\n"); 
             }
             
         }else//Se não for menor, então é maior ou igual a 330
@@ -205,8 +211,6 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
 
 
         */
-        
-        
         Mat smallImgROI;
         vector<Rect> nestedObjects;
         Point center;
@@ -237,14 +241,14 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
     }
 
     if (!fruta.empty())
-        drawTransparency2(img, fruta, 100, 100);
+        drawTransparency2(img, fruta, 20, 20);
 
     cv::putText(img, //target image
-        "Meu texto de teste", //text
-        cv::Point(50, 50), //top-left position
+        "X PONTOS", //text
+        cv::Point(465, 465), //top-left position
         cv::FONT_HERSHEY_DUPLEX,
         1.0,
-        CV_RGB(255, 0, 0), //font color
+        CV_RGB(255, 255, 255), //font color
         2);
 
     imshow( "result", img );
