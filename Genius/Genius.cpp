@@ -87,9 +87,9 @@ void Opcoes ()
     case 3:
         exit(0);
     default:
-        Opcoes();
+        Opcoes(); 
     }
-  
+   
     novaOperacao();
 }
   
